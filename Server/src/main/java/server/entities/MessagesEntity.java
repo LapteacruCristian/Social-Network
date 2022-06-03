@@ -14,13 +14,11 @@ public class MessagesEntity extends AbstractEntity{
     @Column(name = "MESSAGE", nullable = false, length = 1000)
     private String message;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ID_SENDER", nullable = false)
-    private PersonsEntity idSender;
+    @Column(name = "ID_SENDER", nullable = false)
+    private Integer idSender;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ID_RECEIVER", nullable = false)
-    private PersonsEntity idReceiver;
+    @Column(name = "ID_RECEIVER", nullable = false)
+    private Integer idReceiver;
 
     public Long getId() {
         return id;
@@ -38,19 +36,19 @@ public class MessagesEntity extends AbstractEntity{
         this.message = message;
     }
 
-    public PersonsEntity getIdSender() {
+    public Integer getIdSender() {
         return idSender;
     }
 
-    public void setIdSender(PersonsEntity idSender) {
+    public void setIdSender(Integer idSender) {
         this.idSender = idSender;
     }
 
-    public PersonsEntity getIdReceiver() {
+    public Integer getIdReceiver() {
         return idReceiver;
     }
 
-    public void setIdReceiver(PersonsEntity idReceiver) {
+    public void setIdReceiver(Integer idReceiver) {
         this.idReceiver = idReceiver;
     }
 

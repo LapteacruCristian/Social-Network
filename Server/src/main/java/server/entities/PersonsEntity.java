@@ -13,23 +13,23 @@ public class PersonsEntity extends AbstractEntity{
     @Id
     @Column(name = "ID", nullable = false)
 
-    private Long id;
+    private Integer id;
     @Column(name = "NAME", nullable = false, length = 15)
     private String name;
 
-    public PersonsEntity(String name){
-        this.name=name;
+    public PersonsEntity(Integer id,String name){
+        this.id=id;this.name=name;
     }
 
     public PersonsEntity() {
 
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

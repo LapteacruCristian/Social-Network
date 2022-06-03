@@ -11,7 +11,5 @@ public class FriendDao extends DataDao<FriendsEntity,Integer>{
     public void create(FriendsEntity friends){
         persist(friends);
     }
-    public FriendsEntity findbyId(Integer integer) {
-        return (FriendsEntity) em.createNamedQuery("Person.findById").setParameter(1,integer);
-    }
+
 }
