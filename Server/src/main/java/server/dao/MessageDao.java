@@ -10,5 +10,9 @@ public class MessageDao extends DataDao<MessagesEntity,Integer>{
     public void create(MessagesEntity msg){
         persist(msg);
     }
+    @Override
+    public MessagesEntity findbyId(Integer integer) {
+        return (MessagesEntity) PersistenceUtil.getEntityManager().createNamedQuery("Person.findById").setParameter(1,integer).getSingleResult();
+    }
 
 }

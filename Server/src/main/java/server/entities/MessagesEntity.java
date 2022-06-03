@@ -6,19 +6,32 @@ import javax.persistence.*;
 @Table(name = "MESSAGES")
 public class MessagesEntity extends AbstractEntity{
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ID_M_GENERATOR")
+    @SequenceGenerator(name="ID_M_GENERATOR", sequenceName="ID_MESSAGE_SEQ", allocationSize=1)
     @Column(name = "ID", nullable = false)
     private Long id;
 
     @Column(name = "MESSAGE", nullable = false, length = 1000)
     private String message;
 
-    @Column(name = "ID_SENDER", nullable = false)
-    private Integer idSender;
+    @ManyToOne
+    @JoinColumn(name = "id_sender", referencedColumnName = "ID", nullable = false)
+    private PersonsEntity idSender;
 
-    @Column(name = "ID_RECEIVER", nullable = false)
-    private Integer idReceiver;
+    @ManyToOne
+    @JoinColumn(name = "ID_RECEIVER",referencedColumnName = "ID", nullable = false)
+    private PersonsEntity idReceiver;
+
+    public MessagesEntity(String message, PersonsEntity idReceiver, PersonsEntity idSender){
+        this.message=message;
+        this.idReceiver=idReceiver;
+        this.idSender=idSender;
+    }
+
+    public MessagesEntity(){
+
+    }
 
     public Long getId() {
         return id;
@@ -36,19 +49,19 @@ public class MessagesEntity extends AbstractEntity{
         this.message = message;
     }
 
-    public Integer getIdSender() {
+    public PersonsEntity getIdSender() {
         return idSender;
     }
 
-    public void setIdSender(Integer idSender) {
+    public void setIdSender(PersonsEntity idSender) {
         this.idSender = idSender;
     }
 
-    public Integer getIdReceiver() {
+    public PersonsEntity getIdReceiver() {
         return idReceiver;
     }
 
-    public void setIdReceiver(Integer idReceiver) {
+    public void setIdReceiver(PersonsEntity idReceiver) {
         this.idReceiver = idReceiver;
     }
 

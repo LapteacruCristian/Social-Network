@@ -6,17 +6,27 @@ import javax.persistence.*;
 @Table(name = "FRIENDS")
 public class FriendsEntity extends AbstractEntity{
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ID_F_GENERATOR")
+    @SequenceGenerator(name="ID_F_GENERATOR", sequenceName="ID_FRIEND_SEQ", allocationSize=1)
     @Column(name = "ID", nullable = false)
     private Long id;
 
-    @Column(name = "ID_FRIEND_1", nullable = false)
-    private Integer idFriend1;
+    @ManyToOne
+    @JoinColumn(name = "id_friend_1", referencedColumnName = "ID", nullable = false)
+    private PersonsEntity idFriend1;
 
-    @Column(name = "ID_FRIEND_2", nullable = false)
-    private Integer idFriend2;
+    @ManyToOne
+    @JoinColumn(name = "id_friend_2", referencedColumnName = "ID", nullable = false)
+    private PersonsEntity idFriend2;
 
+    public FriendsEntity(PersonsEntity f1, PersonsEntity f2){
+        this.idFriend1=f1;
+        this.idFriend2=f2;
+    }
+    public FriendsEntity(){
+
+    }
     public Long getId() {
         return id;
     }
@@ -25,19 +35,19 @@ public class FriendsEntity extends AbstractEntity{
         this.id = id;
     }
 
-    public Integer getIdFriend1() {
+    public PersonsEntity getIdFriend1() {
         return idFriend1;
     }
 
-    public void setIdFriend1(Integer idFriend1) {
+    public void setIdFriend1(PersonsEntity idFriend1) {
         this.idFriend1 = idFriend1;
     }
 
-    public Integer getIdFriend2() {
+    public PersonsEntity getIdFriend2() {
         return idFriend2;
     }
 
-    public void setIdFriend2(Integer idFriend2) {
+    public void setIdFriend2(PersonsEntity idFriend2) {
         this.idFriend2 = idFriend2;
     }
 

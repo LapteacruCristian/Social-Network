@@ -5,20 +5,28 @@ import javax.persistence.*;
 @Entity
 @Table(name = "PERSONS", schema = "JAVADB", catalog = "")
 @NamedQueries({
+        @NamedQuery(name="Person.findAll", query = "select p from PersonsEntity p "),
         @NamedQuery(name="Person.findById", query = "select p from PersonsEntity p where p.id = ?1"),
         @NamedQuery(name="Person.findByName", query = "select p from PersonsEntity p where p.name = ?2"),
+        @NamedQuery(name="Person.setIsLogged", query = "update PersonsEntity p set p.logged=p.logged")
 })
 public class PersonsEntity extends AbstractEntity{
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "ID", nullable = false)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ID_P_GENERATOR")
+    @SequenceGenerator(name="ID_P_GENERATOR", sequenceName="ID_PERSON_SEQ", allocationSize=1)
+    @Column(name = "ID", nullable = false)
     private Integer id;
+
     @Column(name = "NAME", nullable = false, length = 15)
     private String name;
 
-    public PersonsEntity(Integer id,String name){
-        this.id=id;this.name=name;
+    @Column(name = "LOGGED")
+    private boolean logged;
+
+    public PersonsEntity(String name){
+        this.name=name;
     }
 
     public PersonsEntity() {
@@ -41,5 +49,20 @@ public class PersonsEntity extends AbstractEntity{
         this.name = name;
     }
 
+    public boolean isLogged() {
+        return logged;
+    }
 
+    public void setLogged(boolean isLogged) {
+        this.logged = isLogged;
+    }
+
+    @Override
+    public String toString() {
+        return "PersonsEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", isLogged=" + logged +
+                '}';
+    }
 }
