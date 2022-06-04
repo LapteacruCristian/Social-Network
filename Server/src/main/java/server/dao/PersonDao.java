@@ -48,9 +48,6 @@ public class PersonDao extends DataDao<PersonsEntity,Integer>{
             return (List<PersonsEntity>) PersistenceUtil.getEntityManager().createNamedQuery("Person.getOnlineFriends").setParameter(2,person).getResultList();
         }
 
-        public List<String> getMessages(PersonsEntity sender, PersonsEntity receiver){
-            return (List<String>) PersistenceUtil.getEntityManager().createNamedQuery("Person.getMessages").setParameter(3,sender).setParameter(4,receiver).getResultList();
-        }
 
 
     }

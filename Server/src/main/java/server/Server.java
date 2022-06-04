@@ -2,11 +2,13 @@ package server;
 
 import server.dao.FriendDao;
 import server.dao.MessageDao;
+import server.dao.PersistenceUtil;
 import server.dao.PersonDao;
 import server.entities.FriendsEntity;
 import server.entities.MessagesEntity;
 import server.entities.PersonsEntity;
 
+import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -36,10 +38,10 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
+        EntityManager em= PersistenceUtil.getEntityManager();
 
         Server server = new Server();
         server.RunServer();
-
         //To test get messages
 //        PersonsEntity p1 = new PersonsEntity("TestMess1");
 //        PersonsEntity p2 = new PersonsEntity("TestMess2");

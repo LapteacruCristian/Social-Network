@@ -4,6 +4,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "MESSAGES")
+@NamedQueries(
+        @NamedQuery(name="Person.getMessages", query = "select m.message from MessagesEntity m where m.idSender=?3 and m.idReceiver=?4")
+)
 public class MessagesEntity extends AbstractEntity{
 
     @Id

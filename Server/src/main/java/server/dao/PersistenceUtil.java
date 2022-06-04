@@ -9,16 +9,11 @@ public class PersistenceUtil {
     private static EntityManager em=null;
     static public EntityManager getEntityManager() {
         if (emf == null) {
-            System.out.println("T1");
             emf = Persistence.createEntityManagerFactory("SocialNetwork");
         }
         if(em==null){
-            System.out.println("T2");
-
             em=emf.createEntityManager();
         }
-        System.out.println("T3");
-
         return em;
     }
 
