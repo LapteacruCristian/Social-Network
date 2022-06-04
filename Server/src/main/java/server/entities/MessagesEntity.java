@@ -23,7 +23,7 @@ public class MessagesEntity extends AbstractEntity{
     @JoinColumn(name = "ID_RECEIVER",referencedColumnName = "ID", nullable = false)
     private PersonsEntity idReceiver;
 
-    public MessagesEntity(String message, PersonsEntity idReceiver, PersonsEntity idSender){
+    public MessagesEntity(String message, PersonsEntity idSender, PersonsEntity idReceiver){
         this.message=message;
         this.idReceiver=idReceiver;
         this.idSender=idSender;
