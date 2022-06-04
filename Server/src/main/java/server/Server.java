@@ -26,7 +26,7 @@ public class Server {
                 System.out.println ("Waiting for a client ...");
                 Socket socket = serverSocket.accept();
                 // Execute the client's request in a new thread
-                //new ClientThread(socket,socialNetwork).start();
+                new ClientThread(socket).start();
             }
         } catch (IOException e) {
             System.err. println ("Ooops... " + e);
@@ -36,32 +36,34 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
-//        Server server = new Server();
-//        server.RunServer();
+        Server server = new Server();
+        server.RunServer();
 
-       PersonsEntity p = new PersonsEntity("Dan12");
-       PersonDao p1=new PersonDao();
-       p1.create(p);
-       System.out.println("pers creata");
-
-       PersonsEntity k = new PersonsEntity("Maria12");
-       PersonDao k1=new PersonDao();
-       k1.create(k);
-       System.out.println("pers creata");
-        System.out.println(k.getId());
-
-       MessagesEntity m = new MessagesEntity("Salut ce faci?",k, p);
-       MessageDao m1 =new MessageDao();
-       m1.create(m);
-       System.out.println("mesaj trimis");
-
-       FriendsEntity f = new FriendsEntity(k,p);
-       FriendDao f1 = new FriendDao();
-       f1.create(f);
-       System.out.println("Prieteni adaugati ");
-       System.out.println(k.isLogged());
-       p.setLogged(true);
-       p1.setIsLogged();
-       System.out.println(k1.findAll());
+//       PersonsEntity p = new PersonsEntity("ci853o7");
+//       PersonDao p1=new PersonDao();
+//       p1.create(p);
+//       System.out.println("pers creata");
+//
+//       PersonsEntity k = new PersonsEntity("c50494i");
+//       PersonDao k1=new PersonDao();
+//       k1.create(k);
+//       System.out.println("pers creata");
+//        System.out.println(k.getId());
+//
+//       MessagesEntity m = new MessagesEntity("Salut ce faci?",k, p);
+//       MessageDao m1 =new MessageDao();
+//       m1.create(m);
+//       System.out.println("mesaj trimis");
+//
+//       FriendsEntity f = new FriendsEntity(k,p);
+//       FriendDao f1 = new FriendDao();
+//       f1.create(f);
+//       System.out.println("Prieteni adaugati ");
+//       System.out.println(k.isLogged());
+//       p.setLogged(true);
+//       p1.setIsLogged();
+//      p1.findByName("Dan");
+//        System.out.println("1");
+//       System.out.println(k1.findAll());
     }
 }

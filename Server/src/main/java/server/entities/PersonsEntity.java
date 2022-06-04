@@ -3,12 +3,12 @@ package server.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "PERSONS", schema = "JAVADB", catalog = "")
+@Table(name = "PERSONS", schema = "PA2022", catalog = "")
 @NamedQueries({
         @NamedQuery(name="Person.findAll", query = "select p from PersonsEntity p "),
         @NamedQuery(name="Person.findById", query = "select p from PersonsEntity p where p.id = ?1"),
         @NamedQuery(name="Person.findByName", query = "select p from PersonsEntity p where p.name = ?2"),
-        @NamedQuery(name="Person.setIsLogged", query = "update PersonsEntity p set p.logged=p.logged")
+        @NamedQuery(name="Person.setIsLogged", query = "update PersonsEntity p set p.logged=?3"),
 })
 public class PersonsEntity extends AbstractEntity{
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
