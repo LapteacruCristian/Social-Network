@@ -4,18 +4,22 @@ import server.dao.PersonDao;
 import server.entities.PersonsEntity;
 
 public class Login extends Commands{
-    public String login(PersonsEntity pr){
-        PersonsEntity p=person.findByName(pr.getName());
-        if(p != null){
-            if(!p.isLogged()){
+    public PersonsEntity login(String name){
+        PersonsEntity pr=person.findByName(name);
+        if(pr != null){
+            if(!pr.isLogged()){
                 pr.setLogged(true);
-                pr.setId(p.getId());
                 person.setIsLogged(true);
-                return "[!] Login successfully";
+                System.out.println(pr);
+                this.response= "[!] Login successfully";
+                return pr;
             }
-           return "[!] Login failed: " + pr.getName() + " already logged.";
+           this.response= "[!] Login failed: " + name+ " already logged.";
+            return new PersonsEntity();
         }
-        return "[!] Login failed: " + pr.getName() + " unknown person.";
+        this.response= "[!] Login failed: " + name + " unknown person.";
+        return new PersonsEntity();
     }
+
 }
 

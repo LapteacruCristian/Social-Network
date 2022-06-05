@@ -6,7 +6,8 @@ import javax.persistence.*;
 @Table(name = "FRIENDS")
 @NamedQueries({
         @NamedQuery(name = "Friend.getOnlineFriends", query = "select f.idFriend2 from FriendsEntity f where f.idFriend1 = ?2 and f.idFriend2.logged=true"),
-        @NamedQuery(name = "Friend.isFriend", query = "select f.idFriend2 from FriendsEntity f where f.idFriend2=?2"),
+        @NamedQuery(name = "Friend.isFriend", query = "select f.idFriend2 from FriendsEntity f  where f.idFriend1 = ?2 AND f.idFriend2=?3"),
+        @NamedQuery(name="Friend.getFriends",query = "select f.idFriend2 from FriendsEntity f where f.idFriend1=?2"),
 })
 public class FriendsEntity extends AbstractEntity{
 

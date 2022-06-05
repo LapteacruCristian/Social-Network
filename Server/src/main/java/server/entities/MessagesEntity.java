@@ -71,4 +71,11 @@ public class MessagesEntity extends AbstractEntity{
         this.idReceiver = idReceiver;
     }
 
+    public boolean isSeen() {
+        return seen;
+    }
+
+    public void setSeen(boolean seen) {
+        this.seen = seen;
+    }
 }

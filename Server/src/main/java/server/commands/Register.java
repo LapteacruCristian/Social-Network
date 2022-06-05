@@ -4,11 +4,14 @@ import server.dao.PersonDao;
 import server.entities.PersonsEntity;
 
 public class Register extends Commands{
-    public String register(PersonsEntity pr){
-        if(person.findByName(pr.getName()) == null){
+    public PersonsEntity register(String name){
+        if(person.findByName(name) == null){
+            PersonsEntity pr=new PersonsEntity(name);
             person.create(pr);
-            return "[!] Registered successfully";
+            this.response= "[!] Registered successfully";
+            return pr;
         }
-           return "[!] Already exists an users with the name: "+pr.getName();
+           this.response= "[!] Already exists an users with the name: "+name;
+        return new PersonsEntity();
     }
 }

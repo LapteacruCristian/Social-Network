@@ -1,6 +1,5 @@
 package server;
 import server.commands.*;
-import server.dao.PersonDao;
 import server.entities.PersonsEntity;
 
 import java.io.BufferedReader;
@@ -16,6 +15,7 @@ public class ClientHandler extends Thread {
     private PrintWriter out;
     private PersonsEntity person;
     private List<ClientHandler> clients;
+    private boolean addFriend=false;
     public ClientHandler(Socket socket,List<ClientHandler> clients) throws IOException {
         this.socket = socket;
         this.clients=clients;
@@ -39,15 +39,16 @@ public class ClientHandler extends Thread {
                     if (request.length() > 6 && request.startsWith("login ")) {
                         String name = request.substring(6).trim();
                         Login cmd = new Login();
-                        person.setName(name);
-                        out.println(cmd.login(person));
+                        person=cmd.login(name);
                         System.out.println(person);
+                        out.println(cmd.getResponse());
                     } else if (request.length() > 9 && request.startsWith("register ")) {
                         Register cmd = new Register();
+
                         String name = request.substring(9).trim();
-                        person.setName(name);
-                        out.println(cmd.register(person));
-                    } else if (request.equals("exit")) {
+                        person=cmd.register(name);
+                        out.println(cmd.getResponse());
+                    } else if (request.equals("exit".trim())) {
                         System.out.println("Client exited!");
                         out.println("GoodBye");
                         break;
@@ -58,32 +59,38 @@ public class ClientHandler extends Thread {
                         out.println("[!] Unknown command! Try: login <name>, register <name>, help, exit");
                     }
                 } else {
-                    if (request.equals("exit")) {
+                    if (request.equals("exit".trim())) {
                         System.out.println("Client exited!");
                         Exit cmd = new Exit();
                         person.setLogged(false);
                         out.println(cmd.exit(person.getName()));
+                        person=null;
+
                         break;
                     }
-                    else if(request.startsWith("send to ") && request.length()>8){
+                    else if(request.startsWith("add friend ") && request.length()>11){
+                        String name=request.substring(11);
+                        AddFriend cmd =new AddFriend();
+                        out.println(cmd.addFriend(clients,person,name));
+                    }
+                    else if(request.startsWith("send to ") && request.length()>8 && request.contains(":")){
                         int lastChOfName=request.indexOf(":");
                         String to=request.substring(8,lastChOfName).trim();
-                        for (ClientHandler client:clients){
-                            if(client.person.getName().equals(to))
-                                if(!person.getName().equals(to)){
-                                    client.out.println("["+person.getName()+"] "+request.substring(lastChOfName+1).trim());
-                                }else{
-                                    out.println("[!] Error: You are trying to send a message to yourself.");
-                                }
-                        }
+                        String msg=request.substring(lastChOfName+1).trim();
+                        Send cmd=new Send();
+                        out.println(cmd.send(clients,person,to,msg));
                     }
-                    else if (request.equals("logout")){
+                    else if(request.equals("online friends".trim())){
+                            Friends cmd=new Friends();
+                            out.println(cmd.getOnlineFriends(person));
+                    }
+                    else if (request.equals("logout".trim())){
                         Logout cmd= new Logout();
                         person.setLogged(false);
                         out.println(cmd.logout(person.getName()));
                         person=new PersonsEntity();
                     }
-                    else if (request.equals("help")) {
+                    else if (request.equals("help".trim())) {
                         out.println(new Help().help());
                     }
                     else if (request.length() > 6 && request.startsWith("login ")){
@@ -103,15 +110,39 @@ public class ClientHandler extends Thread {
         } catch (IOException e) {
             System.err.println("Communication error... " + e);
         } finally {
-            if (person.isLogged()) {
-                PersonDao pd=new PersonDao();
-                pd.setIsLogged(false);
-            }
             try {
                 socket.close();// or use try-with-resources
             } catch (IOException e) {
                 System.err.println(e);
             }
         }
+    }
+
+    public PrintWriter getOut() {
+        return out;
+    }
+
+    public void setOut(PrintWriter out) {
+        this.out = out;
+    }
+
+    public PersonsEntity getPerson() {
+        return person;
+    }
+
+    public void setPerson(PersonsEntity person) {
+        this.person = person;
+    }
+
+    public BufferedReader getIn() {
+        return in;
+    }
+
+    public void setIn(BufferedReader in) {
+        this.in = in;
+    }
+
+    public void setAddFriend(boolean addFriend) {
+        this.addFriend = addFriend;
     }
 }
