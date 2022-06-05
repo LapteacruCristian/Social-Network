@@ -3,7 +3,7 @@ package server.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "PERSONS", schema = "PA2022", catalog = "")
+@Table(name = "PERSONS", schema = "JAVADB", catalog = "")
 @NamedQueries({
         @NamedQuery(name="Person.findAll", query = "select p from PersonsEntity p "),
         @NamedQuery(name="Person.findById", query = "select p from PersonsEntity p where p.id = ?1"),

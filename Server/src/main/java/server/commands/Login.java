@@ -1,6 +1,8 @@
 package server.commands;
 
+import server.dao.MessageDao;
 import server.dao.PersonDao;
+import server.entities.MessagesEntity;
 import server.entities.PersonsEntity;
 
 public class Login extends Commands{
@@ -11,10 +13,29 @@ public class Login extends Commands{
                 pr.setLogged(true);
                 person.setIsLogged(true);
                 System.out.println(pr);
-                this.response= "[!] Login successfully";
+                //
+                StringBuilder unreadMessages= new StringBuilder();
+                unreadMessages.append("[!] Login successfully\n");
+                MessageDao messageDao = new MessageDao();
+                if(messageDao.getUnseenMessages(pr).isEmpty()){
+                    this.response = unreadMessages.toString();
+                }
+                else{
+                    unreadMessages.append("[!] Unseen messages:\n");
+                    for(String element : messageDao.getUnseenMessages(pr)){
+                        unreadMessages.append(element);
+                        unreadMessages.append("\n");
+                    }
+                    for(MessagesEntity m : messageDao.getMyMessages(pr)){
+                        m.setSeen(true);
+                    }
+                    this.response = unreadMessages.toString();
+                }
+                //
+                //this.response = "[!] Login successfully";
                 return pr;
             }
-           this.response= "[!] Login failed: " + name+ " already logged.";
+            this.response= "[!] Login failed: " + name+ " already logged.";
             return new PersonsEntity();
         }
         this.response= "[!] Login failed: " + name + " unknown person.";

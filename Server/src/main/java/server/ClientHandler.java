@@ -1,4 +1,5 @@
 package server;
+
 import server.commands.*;
 import server.entities.PersonsEntity;
 
@@ -10,24 +11,26 @@ import java.net.Socket;
 import java.util.List;
 
 public class ClientHandler extends Thread {
-    private Socket socket ;
+    private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
     private PersonsEntity person;
     private List<ClientHandler> clients;
-    private boolean addFriend=false;
-    public ClientHandler(Socket socket,List<ClientHandler> clients) throws IOException {
+    private boolean addFriend = false;
+
+    public ClientHandler(Socket socket, List<ClientHandler> clients) throws IOException {
         this.socket = socket;
-        this.clients=clients;
+        this.clients = clients;
         this.person = new PersonsEntity();
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        this.out = new PrintWriter(socket.getOutputStream(),true);
+        this.out = new PrintWriter(socket.getOutputStream(), true);
     }
+
     @Override
-    public void run () {
+    public void run() {
         try {
             System.out.println("Client " + this.socket.getPort() + " is connected... ");
-            String request=null;
+            String request = null;
             while (true) {
                 request = in.readLine();
                 System.out.println(request);
@@ -39,23 +42,22 @@ public class ClientHandler extends Thread {
                     if (request.length() > 6 && request.startsWith("login ")) {
                         String name = request.substring(6).trim();
                         Login cmd = new Login();
-                        person=cmd.login(name);
+                        person = cmd.login(name);
                         System.out.println(person);
                         out.println(cmd.getResponse());
                     } else if (request.length() > 9 && request.startsWith("register ")) {
                         Register cmd = new Register();
 
                         String name = request.substring(9).trim();
-                        person=cmd.register(name);
+                        person = cmd.register(name);
                         out.println(cmd.getResponse());
                     } else if (request.equals("exit".trim())) {
                         System.out.println("Client exited!");
                         out.println("GoodBye");
                         break;
-                    }else if (request.equals("help")) {
-                       out.println(new Help().help());
-                    }
-                    else {
+                    } else if (request.equals("help")) {
+                        out.println(new Help().help());
+                    } else {
                         out.println("[!] Unknown command! Try: login <name>, register <name>, help, exit");
                     }
                 } else {
@@ -64,42 +66,38 @@ public class ClientHandler extends Thread {
                         Exit cmd = new Exit();
                         person.setLogged(false);
                         out.println(cmd.exit(person.getName()));
-                        person=null;
+                        person = null;
 
                         break;
-                    }
-                    else if(request.startsWith("add friend ") && request.length()>11){
-                        String name=request.substring(11);
-                        AddFriend cmd =new AddFriend();
-                        out.println(cmd.addFriend(clients,person,name));
-                    }
-                    else if(request.startsWith("send to ") && request.length()>8 && request.contains(":")){
-                        int lastChOfName=request.indexOf(":");
-                        String to=request.substring(8,lastChOfName).trim();
-                        String msg=request.substring(lastChOfName+1).trim();
-                        Send cmd=new Send();
-                        out.println(cmd.send(clients,person,to,msg));
-                    }
-                    else if(request.equals("online friends".trim())){
-                            Friends cmd=new Friends();
-                            out.println(cmd.getOnlineFriends(person));
-                    }
-                    else if (request.equals("logout".trim())){
-                        Logout cmd= new Logout();
+                    } else if (request.startsWith("add friend ") && request.length() > 11) {
+                        String name = request.substring(11);
+                        AddFriend cmd = new AddFriend();
+                        out.println(cmd.addFriend(clients, person, name));
+                    } else if (request.startsWith("send to ") && request.length() > 8 && request.contains(":")) {
+                        int lastChOfName = request.indexOf(":");
+                        String to = request.substring(8, lastChOfName).trim();
+                        String msg = request.substring(lastChOfName + 1).trim();
+                        Send cmd = new Send();
+                        out.println(cmd.send(clients, person, to, msg));
+                    } else if (request.startsWith("history ") && request.length() > 8) {
+                        String friendName = request.substring(8);
+                        History cmd = new History();
+                        out.println(cmd.showHistory(person, friendName));
+                    } else if (request.equals("online friends".trim())) {
+                        Friends cmd = new Friends();
+                        out.println(cmd.getOnlineFriends(person));
+                    } else if (request.equals("logout".trim())) {
+                        Logout cmd = new Logout();
                         person.setLogged(false);
                         out.println(cmd.logout(person.getName()));
-                        person=new PersonsEntity();
-                    }
-                    else if (request.equals("help".trim())) {
+                        person = new PersonsEntity();
+                    } else if (request.equals("help".trim())) {
                         out.println(new Help().help());
-                    }
-                    else if (request.length() > 6 && request.startsWith("login ")){
+                    } else if (request.length() > 6 && request.startsWith("login ")) {
                         out.println("[!] You are logged already. For login ---  Logout first.");
-                    }
-                    else if(request.length() > 9 && request.startsWith("register ")){
+                    } else if (request.length() > 9 && request.startsWith("register ")) {
                         out.println("[!] You are logged already. For register --- logout first.");
-                    }
-                    else {
+                    } else {
                         out.println("[!] Unknown command");
                     }
                 }

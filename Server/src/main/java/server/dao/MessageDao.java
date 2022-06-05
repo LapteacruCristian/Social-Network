@@ -20,4 +20,12 @@ public class MessageDao extends DataDao<MessagesEntity,Integer>{
         return (List<String>) PersistenceUtil.getEntityManager().createNamedQuery("Person.getMessages").setParameter(3,sender).setParameter(4,receiver).getResultList();
     }
 
+    public List<String> getUnseenMessages(PersonsEntity receiver){
+        return (List<String>) PersistenceUtil.getEntityManager().createNamedQuery("Person.getUnseenMessages").setParameter(4,receiver).getResultList();
+    }
+
+    public List<MessagesEntity> getMyMessages(PersonsEntity receiver){
+        return (List<MessagesEntity>) PersistenceUtil.getEntityManager().createNamedQuery("Person.getMyMessages").setParameter(4, receiver).getResultList();
+    }
+
 }

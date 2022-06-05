@@ -4,9 +4,11 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "MESSAGES")
-@NamedQueries(
-        @NamedQuery(name="Person.getMessages", query = "select m.message from MessagesEntity m where m.idSender=?3 and m.idReceiver=?4")
-)
+@NamedQueries({
+        @NamedQuery(name = "Person.getMessages", query = "select concat(concat(m.idSender.name,': '),m.message) from MessagesEntity m where (m.idSender=?3 and m.idReceiver=?4) or (m.idSender=?4 and m.idReceiver=?3) order by m.id asc "),
+        @NamedQuery(name = "Person.getUnseenMessages", query = "select concat(concat(m.idSender.name,': '),m.message) from MessagesEntity m where m.idReceiver=?4 and m.seen=false"),
+        @NamedQuery(name="Person.getMyMessages", query = "select m from MessagesEntity m where m.idReceiver=?4")
+})
 public class MessagesEntity extends AbstractEntity{
 
     @Id
