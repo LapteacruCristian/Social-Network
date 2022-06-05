@@ -13,7 +13,7 @@ public class MessagesEntity extends AbstractEntity{
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ID_M_GENERATOR")
     @SequenceGenerator(name="ID_M_GENERATOR", sequenceName="ID_MESSAGE_SEQ", allocationSize=1)
     @Column(name = "ID", nullable = false)
-    private Long id;
+    private int id;
 
     @Column(name = "MESSAGE", nullable = false, length = 1000)
     private String message;
@@ -26,6 +26,9 @@ public class MessagesEntity extends AbstractEntity{
     @JoinColumn(name = "ID_RECEIVER",referencedColumnName = "ID", nullable = false)
     private PersonsEntity idReceiver;
 
+    @Column(name = "SEEN")
+    private boolean seen;
+
     public MessagesEntity(String message, PersonsEntity idSender, PersonsEntity idReceiver){
         this.message=message;
         this.idReceiver=idReceiver;
@@ -36,11 +39,11 @@ public class MessagesEntity extends AbstractEntity{
 
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

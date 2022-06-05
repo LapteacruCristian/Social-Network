@@ -1,22 +1,18 @@
 package server;
 
-import server.dao.FriendDao;
-import server.dao.MessageDao;
 import server.dao.PersistenceUtil;
-import server.dao.PersonDao;
-import server.entities.FriendsEntity;
-import server.entities.MessagesEntity;
-import server.entities.PersonsEntity;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Server {
     private  final int PORT = 8100;
+    private static List<ClientHandler> clients=new ArrayList<>();
     private Server(){
-
     }
 
     public void RunServer() throws IOException {
@@ -25,10 +21,11 @@ public class Server {
         try {
             serverSocket = new ServerSocket(PORT);
             while (true) {
-                System.out.println ("Waiting for a client ...");
                 Socket socket = serverSocket.accept();
                 // Execute the client's request in a new thread
-                new ClientThread(socket).start();
+                ClientHandler client=new ClientHandler(socket,clients);
+                clients.add(client);
+                client.start();
             }
         } catch (IOException e) {
             System.err. println ("Ooops... " + e);

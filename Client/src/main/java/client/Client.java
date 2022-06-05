@@ -15,33 +15,26 @@ public class Client {
         int PORT = 8100; // The server's port
         try (
                 Socket socket = new Socket(serverAddress, PORT);
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader (new InputStreamReader(socket.getInputStream())) ) {
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);) {
+                BufferedReader in= new BufferedReader (new InputStreamReader(socket.getInputStream()) );
+
+            ServerConnection server=new ServerConnection(socket);
             String request;
-            String response = null;
             Scanner s = new Scanner(System.in);
             System.out.println("WELCOME to Social Network!");
             System.out.println("Available commands: login <name>, register <name>, exit");
+            new Thread(server).start();
             while(true){
-                System.out.println("Enter command:");
                 request=s.nextLine();
-                if(request.equals("exit")){
+                if(request.equals("exit")) {
                     out.println(request);
                     break;
                 }
-                else{
                     out.println(request);
-                        while((response=in.readLine()).length()>0){
-                        System.out.println(response);
-                    }
-                }
             }
-            response = in.readLine ();
-            System.out.println(response);
+            in.readLine();
             socket.close();
             s.close();
-            in.close();
-            out.close();
 
         } catch (UnknownHostException e) {
             System.err.println("No server listening... " + e);

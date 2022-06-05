@@ -4,9 +4,10 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "FRIENDS")
-@NamedQueries(
-        @NamedQuery(name="Person.getOnlineFriends", query = "select f.idFriend2 from FriendsEntity f where f.idFriend1 = ?2 and f.idFriend2.logged=true")
-)
+@NamedQueries({
+        @NamedQuery(name = "Friend.getOnlineFriends", query = "select f.idFriend2 from FriendsEntity f where f.idFriend1 = ?2 and f.idFriend2.logged=true"),
+        @NamedQuery(name = "Friend.isFriend", query = "select f.idFriend2 from FriendsEntity f where f.idFriend2=?2"),
+})
 public class FriendsEntity extends AbstractEntity{
 
     @Id
