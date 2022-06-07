@@ -1,6 +1,7 @@
 package server;
 
 import server.commands.*;
+import server.dao.PersonDao;
 import server.entities.PersonsEntity;
 
 import java.io.BufferedReader;
@@ -10,6 +11,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
 
+/**
+ * ClientHandler
+ * Class used to handle clients
+ */
 public class ClientHandler extends Thread {
     private Socket socket;
     private BufferedReader in;
@@ -18,6 +23,12 @@ public class ClientHandler extends Thread {
     private List<ClientHandler> clients;
     private boolean addFriend = false;
 
+    /**
+     * Constructor
+     * @param socket
+     * @param clients
+     * @throws IOException
+     */
     public ClientHandler(Socket socket, List<ClientHandler> clients) throws IOException {
         this.socket = socket;
         this.clients = clients;
@@ -25,6 +36,7 @@ public class ClientHandler extends Thread {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new PrintWriter(socket.getOutputStream(), true);
     }
+
 
     @Override
     public void run() {
@@ -54,6 +66,7 @@ public class ClientHandler extends Thread {
                     } else if (request.equals("exit".trim())) {
                         System.out.println("Client exited!");
                         out.println("GoodBye");
+                        this.clients.remove(this);
                         break;
                     } else if (request.equals("help")) {
                         out.println(new Help().help());
@@ -67,7 +80,7 @@ public class ClientHandler extends Thread {
                         person.setLogged(false);
                         out.println(cmd.exit(person.getName()));
                         person = null;
-
+                        this.clients.remove(this);
                         break;
                     } else if (request.startsWith("add friend ") && request.length() > 11) {
                         String name = request.substring(11);
@@ -108,6 +121,9 @@ public class ClientHandler extends Thread {
         } catch (IOException e) {
             System.err.println("Communication error... " + e);
         } finally {
+            Exit cmd = new Exit();
+            cmd.exit(person.getName());
+            clients.remove(this);
             try {
                 socket.close();// or use try-with-resources
             } catch (IOException e) {

@@ -6,6 +6,11 @@ import server.entities.PersonsEntity;
 import javax.persistence.EntityManager;
 import java.io.Serializable;
 
+/**
+ * Abstract Class DataDao
+ * @param <T>
+ * @param <ID>
+ */
 public abstract class DataDao
         <T extends AbstractEntity, ID extends Serializable> {
     private EntityManager em=PersistenceUtil.getEntityManager(); //create it somehow

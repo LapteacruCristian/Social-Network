@@ -10,12 +10,16 @@ import server.entities.PersonsEntity;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Class History
+ * Class used for executing the command to show the history of conversation with between two friends
+ */
 public class History extends Commands {
-    public String showHistory(PersonsEntity p, String friendName){
+    public String showHistory(PersonsEntity p, String friendName) {
         FriendDao friendDao = new FriendDao();
-        for(PersonsEntity fr : friendDao.getFriends(p)){
-            if(fr.getName().equals(friendName)){
-                if(!p.getName().equals(friendName)){
+        for (PersonsEntity fr : friendDao.getFriends(p)) {
+            if (fr.getName().equals(friendName)) {
+                if (!p.getName().equals(friendName)) {
                     MessageDao messageDao = new MessageDao();
                     StringBuilder messageBuilder = new StringBuilder("[!] Conversation with ");
                     messageBuilder.append(friendName);
@@ -26,8 +30,7 @@ public class History extends Commands {
                     }
                     String messageFinal = messageBuilder.toString();
                     return messageFinal;
-                }
-                else
+                } else
                     return "[!] A conversation with yourself doesn't exists";
             }
         }

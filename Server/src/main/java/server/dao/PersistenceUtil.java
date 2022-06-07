@@ -4,15 +4,20 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+/**
+ * Class PersistenceUtil
+ * Class used to connection with database
+ */
 public class PersistenceUtil {
-    private static EntityManagerFactory emf=null;
-    private static EntityManager em=null;
+    private static EntityManagerFactory emf = null;
+    private static EntityManager em = null;
+
     static public EntityManager getEntityManager() {
         if (emf == null) {
             emf = Persistence.createEntityManagerFactory("SocialNetwork");
         }
-        if(em==null){
-            em=emf.createEntityManager();
+        if (em == null) {
+            em = emf.createEntityManager();
         }
         return em;
     }
